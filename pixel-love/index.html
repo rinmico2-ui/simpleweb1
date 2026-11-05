@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pixel Love — an interactive romantic pixel-art story about a boy, a flower, and someone special.">
+<title>Pixel Love — A Little Something For You</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'><rect x='1' y='2' width='2' height='2' fill='%23ff8fa3'/><rect x='5' y='2' width='2' height='2' fill='%23ff8fa3'/><rect x='3' y='0' width='2' height='6' fill='%23e85d8a'/><rect x='2' y='6' width='4' height='2' fill='%23e85d8a'/></svg>">
+</head>
+<body>
+<main id="game" aria-label="Pixel Love — an interactive romantic story">
+
+  <!-- ===== HUD (hearts + chapter + toggles) ===== -->
+  <header id="hud" aria-label="Game HUD">
+    <div id="hudLeft">
+      <span id="heartsHud" title="Little hearts collected">
+        <svg viewBox="0 0 7 6" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="2" height="1" fill="#ff8fa3"/><rect x="4" y="0" width="2" height="1" fill="#ff8fa3"/><rect x="0" y="1" width="7" height="2" fill="#e85d8a"/><rect x="1" y="3" width="5" height="1" fill="#e85d8a"/><rect x="2" y="4" width="3" height="1" fill="#e85d8a"/><rect x="3" y="5" width="1" height="1" fill="#e85d8a"/></svg>
+        <span id="heartsCount">0 / 4</span>
+      </span>
+      <span id="chapterLabel">A Pixel Story</span>
+    </div>
+    <div id="hudRight">
+      <button id="soundBtn" class="pixel-btn hud-btn" aria-pressed="true" title="Toggle sound effects">SFX: ON</button>
+      <button id="musicBtn" class="pixel-btn hud-btn" aria-pressed="false" title="Toggle music">♪ MUSIC: OFF</button>
+    </div>
+  </header>
+
+  <!-- ===== SCENE 0 — TITLE ===== -->
+  <section class="scene active" id="scene-0" aria-label="Title screen">
+    <div class="sky title-sky">
+      <div class="stars-layer" id="titleStars"></div>
+      <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+      <div class="moon-pixel"></div>
+    </div>
+    <svg class="title-mailbox" viewBox="0 0 80 96" shape-rendering="crispEdges" aria-hidden="true">
+      <rect x="35" y="52" width="10" height="40" fill="#6b4a3a"/>
+      <rect x="10" y="20" width="60" height="34" fill="#e88baa"/>
+      <rect x="10" y="20" width="60" height="8" fill="#f6afc6"/>
+      <rect x="14" y="34" width="12" height="10" fill="#c9456e"/>
+      <rect x="60" y="8" width="6" height="18" fill="#343044"/>
+      <rect x="54" y="4" width="18" height="10" fill="#ffe066"/>
+    </svg>
+    <div class="title-boy"><canvas id="titleBoyCanvas" width="14" height="18" aria-label="The boy standing by his mailbox"></canvas></div>
+    <div class="title-flowers" aria-hidden="true"></div>
+    <div class="title-content">
+      <h1 class="game-title">A LITTLE<br>SOMETHING<br>FOR YOU</h1>
+      <p class="game-subtitle">A tiny world, a little flower, and a message<br>from someone special.</p>
+      <button id="startGameBtn" class="pixel-btn big glow-btn">▶ START GAME</button>
+      <p class="press-start">Press START to begin<span class="blink">▮</span></p>
+    </div>
+    <div class="ground title-ground"></div>
+  </section>
+
+  <!-- ===== SCENE 1 — THE LITTLE ADVENTURE (walk the garden) ===== -->
+  <section class="scene" id="scene-1" aria-label="Walk the garden">
+    <div class="sky garden-sky">
+      <div class="cloud c2"></div><div class="cloud c3"></div>
+      <div class="sun-low"></div>
+    </div>
+    <svg class="cherry tree-left" viewBox="0 0 100 110" shape-rendering="crispEdges" aria-hidden="true">
+      <rect x="44" y="60" width="12" height="46" fill="#6b4a3a"/><rect x="40" y="78" width="6" height="8" fill="#54382c"/>
+      <rect x="24" y="14" width="52" height="24" fill="#f6afc6"/><rect x="12" y="32" width="76" height="24" fill="#ee92b2"/>
+      <rect x="28" y="6" width="44" height="12" fill="#fbd0de"/><rect x="20" y="22" width="8" height="8" fill="#ffffff"/><rect x="70" y="38" width="8" height="8" fill="#ffffff"/>
+    </svg>
+    <svg class="cherry tree-right" viewBox="0 0 100 110" shape-rendering="crispEdges" aria-hidden="true">
+      <rect x="44" y="60" width="12" height="46" fill="#6b4a3a"/>
+      <rect x="24" y="14" width="52" height="24" fill="#fbd0de"/><rect x="12" y="32" width="76" height="24" fill="#f6afc6"/>
+      <rect x="28" y="6" width="44" height="12" fill="#ffffff"/><rect x="26" y="26" width="8" height="8" fill="#e88baa"/><rect x="66" y="40" width="8" height="8" fill="#e88baa"/>
+    </svg>
+    <div class="hills garden-hills"></div>
+    <svg class="pond" viewBox="0 0 180 70" aria-hidden="true">
+      <ellipse cx="90" cy="38" rx="86" ry="28" fill="#7ec8e3"/><ellipse cx="90" cy="34" rx="78" ry="22" fill="#a8d8ea"/>
+      <ellipse cx="56" cy="30" rx="22" ry="6" fill="#ffffff" opacity="0.55"/>
+      <ellipse cx="120" cy="40" rx="14" ry="4" fill="#ffffff" opacity="0.45"/>
+    </svg>
+    <svg class="fence" viewBox="0 0 320 46" shape-rendering="crispEdges" aria-hidden="true">
+      <rect x="0" y="16" width="320" height="6" fill="#a97c50"/><rect x="0" y="28" width="320" height="6" fill="#8a5f3a"/>
+      <rect x="18" y="0" width="10" height="46" fill="#c49a6c"/><rect x="78" y="0" width="10" height="46" fill="#c49a6c"/><rect x="138" y="0" width="10" height="46" fill="#c49a6c"/><rect x="198" y="0" width="10" height="46" fill="#c49a6c"/><rect x="258" y="0" width="10" height="46" fill="#c49a6c"/>
+    </svg>
+    <svg class="garden-mailbox" viewBox="0 0 60 72" shape-rendering="crispEdges" aria-hidden="true">
+      <rect x="26" y="34" width="8" height="34" fill="#6b4a3a"/><rect x="6" y="10" width="48" height="26" fill="#a8d8ea"/><rect x="6" y="10" width="48" height="7" fill="#ffffff"/><rect x="48" y="2" width="5" height="14" fill="#343044"/><rect x="42" y="0" width="16" height="8" fill="#ff8fa3"/>
+    </svg>
+
+    <div class="ground garden-ground"></div>
+    <div id="butterflies1" class="butterfly-layer"></div>
+
+    <!-- collectible hearts -->
+    <button class="p-heart" id="heart1" style="left:18%; top:66%" aria-label="Hidden heart"></button>
+    <button class="p-heart" id="heart2" style="left:41%; top:66%" aria-label="Hidden heart"></button>
+    <button class="p-heart" id="heart3" style="left:64%; top:74%" aria-label="Hidden heart"></button>
+    <button class="p-heart" id="heart4" style="left:86%; top:68%" aria-label="Hidden heart"></button>
+
+    <!-- interact spots (also tappable) -->
+    <button class="spot" id="spotFlower" style="left:27%; top:46%" aria-label="Look at the flowers"></button>
+    <button class="spot" id="spotPond"   style="left:25%; top:63%" aria-label="Look at the pond"></button>
+    <button class="spot" id="spotTree"   style="left:78%; top:30%" aria-label="Look at the tree"></button>
+    <button class="spot" id="spotMailbox" style="left:90%; top:52%" aria-label="Look at the mailbox"></button>
+
+    <!-- player -->
+    <div id="boyWrap1" class="player1" style="left:12%; top:62%">
+      <canvas id="boyCanvas1" width="14" height="18"></canvas>
+      <div class="soft-shadow"></div>
+    </div>
+
+    <div id="prompt" class="hidden" role="button" tabindex="0">Press <kbd>E</kbd> — Look</div>
+
+    <!-- mobile D-pad -->
+    <div class="dpad" aria-label="Movement controls">
+      <button data-dir="up"    class="dbtn up"    aria-label="Move up">▲</button>
+      <button data-dir="left"  class="dbtn left"  aria-label="Move left">◀</button>
+      <button data-dir="right" class="dbtn right" aria-label="Move right">▶</button>
+      <button data-dir="down"  class="dbtn down"  aria-label="Move down">▼</button>
+    </div>
+    <div id="controlsHint" class="controls-hint">ARROWS / WASD — move · E — look around</div>
+
+    <button id="continueJourneyBtn" class="pixel-btn big scene-continue">CONTINUE JOURNEY ▸</button>
+  </section>
+
+  <!-- ===== SCENE 2 — FINDING THE FLOWER ===== -->
+  <section class="scene" id="scene-2" aria-label="Finding the flower">
+    <div class="sky flower-sky"><div class="sun-big"></div><div class="cloud c1"></div><div class="cloud c2"></div></div>
+    <svg class="cherry tree-left small" viewBox="0 0 100 110" shape-rendering="crispEdges" aria-hidden="true"><rect x="44" y="60" width="12" height="46" fill="#6b4a3a"/><rect x="24" y="14" width="52" height="24" fill="#f6afc6"/><rect x="12" y="32" width="76" height="24" fill="#ee92b2"/></svg>
+    <div class="hills"></div>
+    <svg class="fence fence-right" viewBox="0 0 320 46" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="16" width="320" height="6" fill="#a97c50"/><rect x="0" y="28" width="320" height="6" fill="#8a5f3a"/><rect x="18" y="0" width="10" height="46" fill="#c49a6c"/><rect x="78" y="0" width="10" height="46" fill="#c49a6c"/><rect x="138" y="0" width="10" height="46" fill="#c49a6c"/><rect x="198" y="0" width="10" height="46" fill="#c49a6c"/><rect x="258" y="0" width="10" height="46" fill="#c49a6c"/></svg>
+    <div class="ground flower-ground">
+      <div class="flower-bed"></div>
+    </div>
+    <div id="butterflies2" class="butterfly-layer"></div>
+
+    <div id="boyWrap2" class="boy2" style="left:8%; bottom:16%"><canvas id="boyCanvas2" width="14" height="18"></canvas><div class="soft-shadow"></div></div>
+    <button id="patchFlower" aria-label="A glowing flower — pick it?"><canvas id="patchFlowerCanvas" width="8" height="8"></canvas><span class="glow-ring"></span></button>
+    <div id="pickSparkles"></div>
+
+    <button id="continueJourney2Btn" class="pixel-btn big scene-continue hidden">CONTINUE JOURNEY ▸</button>
+  </section>
+
+  <!-- ===== SCENE 3 — THE JOURNEY TO HER ===== -->
+  <section class="scene" id="scene-3" aria-label="The journey to her">
+    <div class="sky dusk-sky" id="duskSky"><div class="sun-setting"></div></div>
+    <div class="parallax layer far" id="layerFar"></div>
+    <div class="parallax layer near" id="layerNear"></div>
+    <div class="lantern lantern-a"></div><div class="lantern lantern-b"></div><div class="lantern lantern-c"></div>
+    <div class="ground path-ground">
+      <div class="path-strip"></div>
+    </div>
+    <div id="petals3"></div>
+    <div id="butterflies3" class="butterfly-layer"></div>
+    <div id="boyWrap3" class="walker3"><canvas id="boyCanvas3" width="14" height="18"></canvas><div class="soft-shadow"></div></div>
+  </section>
+
+  <!-- ===== SCENE 4 — THE GIRL ===== -->
+  <section class="scene" id="scene-4" aria-label="Meeting the girl">
+    <div class="sky warm-sky"><div class="sun-low big"></div><div class="cloud c1"></div><div class="cloud c3"></div></div>
+    <div class="hills"></div>
+    <svg class="cherry tree-right" viewBox="0 0 100 110" shape-rendering="crispEdges" aria-hidden="true"><rect x="44" y="60" width="12" height="46" fill="#6b4a3a"/><rect x="24" y="14" width="52" height="24" fill="#fbd0de"/><rect x="12" y="32" width="76" height="24" fill="#f6afc6"/><rect x="28" y="6" width="44" height="12" fill="#ffffff"/></svg>
+    <svg class="fence fence-left" viewBox="0 0 320 46" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="16" width="320" height="6" fill="#a97c50"/><rect x="0" y="28" width="320" height="6" fill="#8a5f3a"/><rect x="18" y="0" width="10" height="46" fill="#c49a6c"/><rect x="78" y="0" width="10" height="46" fill="#c49a6c"/><rect x="138" y="0" width="10" height="46" fill="#c49a6c"/><rect x="198" y="0" width="10" height="46" fill="#c49a6c"/><rect x="258" y="0" width="10" height="46" fill="#c49a6c"/></svg>
+    <div class="ground scene4-ground">
+      <div class="flower-bed right-bed"></div>
+    </div>
+    <div id="petals4" class="petal-layer"></div>
+    <div id="boyWrap4" class="actor4 boy4"><canvas id="boyCanvas4" width="14" height="18"></canvas><div class="soft-shadow"></div></div>
+    <div id="girlWrap4" class="actor4 girl4"><canvas id="girlCanvas4" width="14" height="18"></canvas><div class="soft-shadow"></div>
+      <div id="qBubble" aria-hidden="true">?</div>
+    </div>
+    <button id="giveFlowerBtn" class="pixel-btn big hidden">GIVE HER THE FLOWER</button>
+  </section>
+
+  <!-- ===== SCENE 5 — THE FLOWER GIFT ===== -->
+  <section class="scene" id="scene-5" aria-label="The flower gift">
+    <div class="sky dusk-sky"><div class="sun-setting high"></div></div>
+    <div class="hills"></div>
+    <div class="ground gift-ground"></div>
+    <div id="warmGlow"></div>
+    <div id="boyWrap5" class="actor5 boy5"><canvas id="boyCanvas5" width="14" height="18"></canvas><div class="soft-shadow"></div></div>
+    <div id="girlWrap5" class="actor5 girl5"><canvas id="girlCanvas5" width="14" height="18"></canvas><div class="soft-shadow"></div></div>
+  </section>
+
+  <!-- ===== SCENE 6 — A LITTLE PHOTO MOMENT ===== -->
+  <section class="scene" id="scene-6" aria-label="A little photo moment">
+    <div class="sky dusk-sky"><div class="sun-setting high"></div><div class="stars-layer faint" id="photoStars"></div></div>
+    <div class="hills"></div>
+    <div class="ground photo-ground"></div>
+    <div id="petals6" class="petal-layer"></div>
+    <h2 class="scene-heading photo-title">A LITTLE MOMENT<br>TO REMEMBER</h2>
+    <div class="photo-frame">
+      <div class="frame-inner">
+        <div id="boyWrap6" class="actor6 boy6"><canvas id="boyCanvas6" width="14" height="18"></canvas><div class="soft-shadow"></div></div>
+        <canvas id="photoHeartCanvas" width="7" height="6" class="photo-heart"></canvas>
+        <div id="girlWrap6" class="actor6 girl6"><canvas id="girlCanvas6" width="14" height="18"></canvas><div class="soft-shadow"></div></div>
+      </div>
+    </div>
+    <button id="keepMomentBtn" class="pixel-btn big">KEEP THIS MOMENT</button>
+    <div id="polaroid" class="hidden" aria-hidden="true">
+      <canvas id="snapshotCanvas" width="168" height="144"></canvas>
+      <p>for keeps ♥</p>
+    </div>
+    <button id="continueAfterPhotoBtn" class="pixel-btn big scene-continue hidden">CONTINUE ▸</button>
+  </section>
+
+  <!-- ===== SCENE 7 — THE SECRET LETTER ===== -->
+  <section class="scene" id="scene-7" aria-label="The secret letter">
+    <div class="sky letter-sky"><div class="stars-layer" id="letterStars"></div><div class="moon-pixel"></div></div>
+    <div class="hills night-hills"></div>
+    <div class="ground night-ground"></div>
+    <h2 class="scene-heading">A LETTER, SEALED WITH LOVE</h2>
+    <button id="envelopeBtn" aria-label="Open the letter">
+      <svg viewBox="0 0 120 84" shape-rendering="crispEdges" class="envelope-svg" aria-hidden="true">
+        <rect x="2" y="6" width="116" height="72" fill="#fff1dc" stroke="#343044" stroke-width="4"/>
+        <path class="env-flap" d="M2 8 L60 44 L118 8" fill="#f6d9b8" stroke="#343044" stroke-width="4" stroke-linejoin="round"/>
+        <g class="env-seal">
+          <rect x="52" y="34" width="16" height="14" fill="#e85d8a"/><rect x="54" y="30" width="5" height="4" fill="#ff8fa3"/><rect x="61" y="30" width="5" height="4" fill="#ff8fa3"/>
+        </g>
+      </svg>
+      <span class="env-hint">tap to open</span>
+    </button>
+    <div id="letterPanel" class="hidden" role="document" aria-label="A letter for you">
+      <div class="letter-paper">
+        <div class="letter-seal-stamp">♥</div>
+        <p id="letterText"></p><span id="letterCursor" class="blink">▮</span>
+        <button id="continueAfterLetterBtn" class="pixel-btn letter-continue hidden">CONTINUE ▸</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCENE 8 — THE INTERACTIVE GIFT ===== -->
+  <section class="scene" id="scene-8" aria-label="One more gift">
+    <div class="sky letter-sky"><div class="stars-layer" id="giftStars"></div><div class="moon-pixel"></div></div>
+    <div class="hills night-hills"></div>
+    <div class="ground night-ground"></div>
+    <h2 class="scene-heading">BEFORE YOU GO...<br><span class="heading-sub">one more little gift</span></h2>
+    <button id="giftBtn" aria-label="Open the gift">
+      <div class="gift-box">
+        <div class="gift-lid"><div class="lid-ribbon"></div></div>
+        <div class="gift-body"><div class="body-ribbon"></div></div>
+      </div>
+      <canvas id="giftHeartCanvas" width="7" height="6" class="hidden"></canvas>
+      <span class="env-hint">tap to open</span>
+    </button>
+    <div id="giftMessage" class="hidden">
+      <p class="gift-big">Sending you a little happiness,<br>one pixel at a time.</p>
+    </div>
+    <button id="continueAfterGiftBtn" class="pixel-btn big scene-continue hidden">CONTINUE ▸</button>
+  </section>
+
+  <!-- ===== SCENE 9 — THE ENDING ===== -->
+  <section class="scene" id="scene-9" aria-label="The ending">
+    <div class="sky night-sky">
+      <div class="moon-big"></div>
+      <div class="stars-layer" id="nightStars"></div>
+    </div>
+    <svg class="sakura-big" viewBox="0 0 200 180" shape-rendering="crispEdges" aria-hidden="true">
+      <rect x="88" y="96" width="22" height="80" fill="#4a3340"/><rect x="64" y="120" width="14" height="8" fill="#4a3340"/><rect x="122" y="132" width="12" height="8" fill="#4a3340"/>
+      <rect x="54" y="30" width="96" height="44" fill="#d98bb0"/><rect x="30" y="56" width="140" height="40" fill="#c9749d"/><rect x="66" y="12" width="68" height="24" fill="#eab0cc"/>
+      <rect x="46" y="44" width="10" height="10" fill="#fbd0de"/><rect x="150" y="52" width="10" height="10" fill="#fbd0de"/><rect x="92" y="66" width="10" height="10" fill="#fbd0de"/>
+    </svg>
+    <div class="lamppost lamp-l"></div><div class="lamppost lamp-r"></div>
+    <div id="fireflies"></div>
+    <div class="hills night-hills"></div>
+    <div class="ground night-ground"></div>
+    <div id="endingBoyWrap" class="actor9 boy9"><canvas id="endingBoyCanvas" width="14" height="18"></canvas><div class="soft-shadow"></div></div>
+    <div id="endingGirlWrap" class="actor9 girl9"><canvas id="endingGirlCanvas" width="14" height="18"></canvas><div class="soft-shadow"></div></div>
+    <div id="endingText">
+      <p class="ending-kicker">— THE END —</p>
+      <h1 class="ending-title">SOME LITTLE THINGS CAN<br>MAKE THE BIGGEST<br>MEMORIES.</h1>
+      <p class="ending-sub">Thank you for visiting my little world.</p>
+      <p id="allHeartsBadge" class="hidden">♥ YOU FOUND EVERY LITTLE HEART ♥</p>
+    </div>
+    <div id="endingButtons">
+      <button id="replayStoryBtn" class="pixel-btn big">↻ REPLAY THE STORY</button>
+      <button id="returnTitleBtn" class="pixel-btn">RETURN TO BEGINNING</button>
+      <button id="musicToggleEndingBtn" class="pixel-btn">♪ MUSIC: OFF</button>
+    </div>
+  </section>
+
+  <!-- ===== shared overlays ===== -->
+  <div id="particles" aria-hidden="true"></div>
+  <div id="flowerGift" aria-hidden="true"><canvas id="flowerGiftCanvas" width="8" height="8"></canvas></div>
+  <div id="bigHeart" aria-hidden="true"><canvas id="bigHeartCanvas" width="7" height="6"></canvas></div>
+  <div id="flash" aria-hidden="true"></div>
+  <div id="toast" role="status" class="hidden"></div>
+
+  <!-- ===== shared dialogue ===== -->
+  <div id="dialogue" class="hidden" role="dialog" aria-live="polite">
+    <div id="dlgName">BOY</div>
+    <p id="dlgText"></p><span id="dlgCursor" class="blink">▮</span>
+    <button id="dlgSkip" class="pixel-btn tiny-btn">SKIP ▸▸</button>
+  </div>
+
+</main>
+<script src="js/config.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/drawing.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

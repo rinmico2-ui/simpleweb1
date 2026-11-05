@@ -1,0 +1,357 @@
+/* ============ Pixel Love — design system ============
+   Palette: #F6AFC6 #E88BAA #C9B6E4 #FFF1DC #A8CFA0 #A8D8EA / ink #343044 */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --pink:#f6afc6; --rose:#e88baa; --rose-d:#c9456e; --lav:#c9b6e4; --lav-d:#9b7ec4;
+  --cream:#fff1dc; --cream-d:#f6d9b8; --green:#a8cfa0; --green-d:#7fae74; --blue:#a8d8ea; --blue-d:#7ec8e3;
+  --ink:#343044; --gold:#ffe066;
+}
+html,body{height:100%;overflow:hidden;background:#1c1830;font-family:"Courier New","Lucida Console",monospace;color:var(--ink)}
+canvas{image-rendering:pixelated;image-rendering:crisp-edges}
+kbd{background:var(--ink);color:var(--cream);padding:1px 6px;border-radius:3px;font-size:.85em}
+.hidden{display:none!important}
+.blink{animation:blink 1s steps(2,end) infinite;color:var(--rose-d)}
+@keyframes blink{50%{opacity:0}}
+
+#game{position:fixed;inset:0;overflow:hidden;height:100dvh}
+.scene{position:absolute;inset:0;display:none;overflow:hidden}
+.scene.active{display:block;animation:sceneIn .8s ease both}
+@keyframes sceneIn{from{opacity:0;filter:brightness(1.6)}to{opacity:1;filter:brightness(1)}}
+
+/* ============ HUD ============ */
+#hud{position:absolute;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;pointer-events:none}
+#hud>*{pointer-events:auto}
+#hudLeft{display:flex;align-items:center;gap:10px;background:rgba(52,48,68,.55);border:3px solid var(--cream);padding:4px 10px;box-shadow:4px 4px 0 rgba(0,0,0,.35)}
+#heartsHud{display:flex;align-items:center;gap:6px;color:#fff;font-weight:bold;font-size:14px;letter-spacing:1px}
+#heartsHud svg{width:18px;height:16px;filter:drop-shadow(1px 1px 0 #000)}
+#chapterLabel{color:var(--cream);font-size:11px;letter-spacing:2px;border-left:2px solid rgba(255,241,220,.4);padding-left:10px;text-transform:uppercase}
+#hudRight{display:flex;gap:8px}
+.hud-btn{font-size:11px;padding:7px 10px;letter-spacing:1px;background:var(--ink);color:var(--cream);border:3px solid var(--cream);box-shadow:3px 3px 0 rgba(0,0,0,.4);cursor:pointer;font-family:inherit;font-weight:bold}
+.hud-btn[aria-pressed="true"]{background:#2e7d32;border-color:#a5ffa8}
+
+/* ============ Buttons ============ */
+.pixel-btn{background:var(--ink);color:var(--cream);border:4px solid var(--ink);box-shadow:0 5px 0 #000,inset 0 0 0 3px var(--cream);font-family:inherit;font-weight:bold;letter-spacing:1px;padding:13px 26px;font-size:16px;cursor:pointer;text-transform:uppercase}
+.pixel-btn:hover{transform:translateY(-2px);background:#241f33}
+.pixel-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #000}
+.pixel-btn.big{font-size:19px;padding:16px 30px}
+.pixel-btn.tiny-btn{font-size:11px;padding:6px 12px;letter-spacing:2px}
+.glow-btn{animation:btnGlow 2.2s ease-in-out infinite}
+@keyframes btnGlow{0%,100%{box-shadow:0 5px 0 #000,inset 0 0 0 3px var(--cream),0 0 18px 2px rgba(255,224,102,.0)}50%{box-shadow:0 5px 0 #000,inset 0 0 0 3px var(--cream),0 0 26px 6px rgba(255,224,102,.75)}}
+.scene-continue{position:absolute;z-index:30;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);white-space:nowrap}
+.scene-continue:hover{transform:translateX(-50%) translateY(-2px)}
+
+/* ============ Skies ============ */
+.sky{position:absolute;inset:0}
+.title-sky{background:linear-gradient(180deg,#3a2b5c 0%,#6d4a8a 22%,#a15a9c 38%,#d67a9d 52%,#f6afc6 64%,#ffd9c2 78%,#ffe9c8 88%,#a8cfa0 88.5%,#8fbf8a 100%)}
+.garden-sky{background:linear-gradient(180deg,#ffe9f2 0%,#ffd3e0 30%,#ffc9d6 48%,#ffe3b8 62%,#cfeedd 75%,#a8cfa0 100%)}
+.flower-sky{background:linear-gradient(180deg,#fff5d6 0%,#ffe9b8 28%,#ffd9c2 52%,#ffb8cd 70%,#a8cfa0 100%)}
+.dusk-sky{background:linear-gradient(180deg,#4a3566 0%,#7a4a7c 24%,#b85f8c 42%,#e88baa 56%,#ffb98a 70%,#ffe3b8 78%,#a8cfa0 100%)}
+.warm-sky{background:linear-gradient(180deg,#7a4a7c 0%,#b85f8c 30%,#e88baa 48%,#ffc9a0 66%,#ffe3b8 76%,#a8cfa0 100%)}
+.letter-sky{background:linear-gradient(180deg,#161230 0%,#241d3e 45%,#33294a 75%,#3a3350 100%)}
+.night-sky{background:linear-gradient(180deg,#0d0b1e 0%,#1a1533 40%,#241d3e 70%,#2b2440 100%)}
+
+.stars-layer{position:absolute;inset:0}
+.star{position:absolute;background:#fff;animation:twinkle var(--tw,2.4s) ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.18;transform:scale(.6)}50%{opacity:1;transform:scale(1.05)}}
+.stars-layer.faint .star{opacity:.35}
+
+.moon-pixel{position:absolute;top:10%;right:19%;width:46px;height:46px;background:#fff8d6;box-shadow:0 0 24px 9px rgba(255,248,214,.45), inset -9px -7px 0 #e8dfc0}
+.moon-big{position:absolute;top:9%;right:18%;width:60px;height:60px;background:#fff8d6;box-shadow:0 0 30px 12px rgba(255,248,214,.5), inset -13px -9px 0 #e8dfc0;z-index:1}
+
+.sun-low{position:absolute;left:16%;bottom:34%;width:88px;height:88px;background:#ffdf8a;box-shadow:0 0 46px 16px rgba(255,223,138,.75)}
+.sun-low.big{left:auto;right:14%;bottom:36%;width:110px;height:110px}
+.sun-big{position:absolute;top:8%;right:12%;width:96px;height:96px;background:#fff3a0;box-shadow:0 0 50px 18px rgba(255,243,160,.8)}
+.sun-setting{position:absolute;left:50%;bottom:36%;transform:translateX(-50%);width:110px;height:110px;background:#ffb36b;box-shadow:0 0 60px 22px rgba(255,179,107,.75)}
+.sun-setting.high{bottom:44%;width:88px;height:88px}
+
+.cloud{position:absolute;width:96px;height:26px;background:#fff;opacity:.94;box-shadow:16px -11px 0 #fff,32px 0 0 #fff,54px -6px 0 #fff}
+.cloud::after{content:"";position:absolute;left:12px;top:10px;width:70px;height:13px;background:#ffe9f2}
+.c1{top:12%;left:-140px;animation:drift 64s linear infinite}
+.c2{top:22%;left:-160px;transform:scale(.75);animation:drift 78s linear infinite;animation-delay:-30s}
+.c3{top:7%;left:-120px;transform:scale(1.25);animation:drift 90s linear infinite;animation-delay:-55s}
+@keyframes drift{to{transform:translateX(130vw)}}
+
+/* ============ Terrain ============ */
+.hills{position:absolute;left:0;right:0;bottom:34%;height:64px;background:radial-gradient(ellipse at 18% 100%,#c3e2b6 46%,transparent 47%),radial-gradient(ellipse at 78% 100%,#b3d8a6 48%,transparent 49%);background-size:65% 100%;background-repeat:repeat-x}
+.garden-hills{bottom:33%}
+.night-hills{background:radial-gradient(ellipse at 18% 100%,#3d3350 46%,transparent 47%),radial-gradient(ellipse at 78% 100%,#342c46 48%,transparent 49%)}
+.ground{position:absolute;left:0;right:0;bottom:0;height:36%;z-index:1;background:linear-gradient(180deg,#a8cfa0 0%,#8fbf8a 55%,#79ac74 100%);border-top:6px solid #b8dcb0}
+.title-ground{height:22%}
+.night-ground{background:linear-gradient(180deg,#4a4060 0%,#3a3350 55%,#2c2740 100%);border-top:6px solid #554a70}
+.path-ground{background:
+  repeating-linear-gradient(180deg, transparent 0 7px, rgba(255,255,255,.32) 7px 9px) 0 74%/100% 26% no-repeat,
+  linear-gradient(180deg, transparent 74%, #7ec8e3 74%, #4a9ec7 100%) 0 0/100% 100%,
+  linear-gradient(180deg,#a8cfa0 0%,#8fbf8a 60%,#79ac74 100%)}
+.path-strip{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:24%;height:100%;background:#f0d9a8;border-left:5px solid #8a5f3a;border-right:5px solid #8a5f3a;clip-path:polygon(46% 0,54% 0,72% 100%,28% 100%)}
+.path-strip::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0 22px,rgba(138,95,58,.22) 22px 24px)}
+
+/* ============ Scenery props ============ */
+.cherry{position:absolute;z-index:2;bottom:32%;width:120px;filter:drop-shadow(4px 4px 0 rgba(0,0,0,.18))}
+.pond{position:absolute;z-index:2;left:22%;bottom:14%;width:170px;max-width:34vw}
+.fence{position:absolute;z-index:2;left:6%;bottom:32%;width:300px;max-width:44vw}
+.fence-left{left:4%;bottom:32.5%}
+.fence-right{right:4%;left:auto;bottom:34%}
+.garden-mailbox{position:absolute;z-index:2;right:4%;bottom:29%;width:64px}
+.lantern{position:absolute;z-index:3;width:12px;height:14px;background:#ffdf8a;box-shadow:0 0 18px 6px rgba(255,223,138,.8);bottom:22%}
+.sakura-big{position:absolute;z-index:2;left:-4%;bottom:20%;width:min(360px,54vw);filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
+.lamppost{position:absolute;z-index:2;bottom:32%;width:12px;height:110px;background:#241f33}
+#fireflies{position:absolute;inset:0;z-index:9;pointer-events:none}
+.title-mailbox{position:absolute;left:6%;bottom:14%;width:110px;z-index:5}
+.title-boy{position:absolute;left:calc(6% + 124px);bottom:calc(14% + 2px);z-index:5}
+.title-boy canvas{width:96px;height:123px}
+.garden-mailbox,.mailbox{filter:drop-shadow(3px 3px 0 rgba(0,0,0,.2))}
+
+.flower-bed{position:absolute;left:50%;bottom:8%;width:44%;height:44%;
+  background:
+    radial-gradient(circle at 8% 30%,#fff1dc 6px,transparent 7px),
+    radial-gradient(circle at 18% 68%,#e88baa 10px,transparent 11px),
+    radial-gradient(circle at 26% 22%,#c9b6e4 7px,transparent 8px),
+    radial-gradient(circle at 33% 48%,#ffffff 6px,transparent 7px),
+    radial-gradient(circle at 40% 76%,#ffe066 10px,transparent 11px),
+    radial-gradient(circle at 46% 34%,#e88baa 8px,transparent 9px),
+    radial-gradient(circle at 53% 60%,#fff 6px,transparent 7px),
+    radial-gradient(circle at 60% 22%,#ffb3c8 9px,transparent 10px),
+    radial-gradient(circle at 66% 72%,#c9b6e4 8px,transparent 9px),
+    radial-gradient(circle at 73% 42%,#ffe066 6px,transparent 7px),
+    radial-gradient(circle at 80% 18%,#ffffff 6px,transparent 7px),
+    radial-gradient(circle at 86% 64%,#e88baa 10px,transparent 11px),
+    radial-gradient(circle at 93% 36%,#fff1dc 6px,transparent 7px);
+  opacity:.95}
+.flower-bed::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;background:repeating-linear-gradient(90deg,#5e9463 0 6px,transparent 6px 12px)}
+.right-bed{left:auto;right:4%;width:34%}
+
+/* ============ Characters ============ */
+.boy2,.player1,.actor4,.actor5,.actor6,.actor9{position:absolute;z-index:6}
+.player1{width:96px;z-index:8}
+.player1 canvas{width:96px;height:123px}
+.boy2{width:128px;z-index:6;transition:left 5s linear}
+.boy2 canvas{width:128px;height:164px}
+.actor4,.actor5,.actor6,.actor9{display:flex;flex-direction:column;align-items:center}
+.actor4 canvas,.actor5 canvas,.actor6 canvas,.actor9 canvas{width:120px;height:154px}
+.soft-shadow{width:64%;height:11px;background:rgba(0,0,0,.22);border-radius:50%;margin-top:-4px}
+.boy-flip canvas{transform:scaleX(-1)}
+.char-idle{animation:idleBob 2.3s ease-in-out infinite}
+.char-walk{animation:walkBob .46s steps(2,end) infinite,bobY .46s ease-in-out infinite}
+@keyframes idleBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes walkBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes bobY{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+#boyWrap1{will-change:left,top}
+#boyWrap4{left:-18%;bottom:14%}
+#girlWrap4{right:16%;bottom:14%}
+#boyWrap5{left:30%;bottom:12%}
+#girlWrap5{right:26%;bottom:12%}
+#boyWrap6,#girlWrap6{bottom:6%}
+#boyWrap6{left:30%}#girlWrap6{right:30%}
+#endingBoyWrap{left:26%;bottom:10%}#endingGirlWrap{right:26%;bottom:10%}
+.actor5 canvas{width:132px;height:169px}
+
+/* ============ Title scene ============ */
+.title-content{position:absolute;z-index:6;left:50%;top:9%;transform:translateX(-50%);text-align:center;width:min(680px,94%)}
+.game-title{font-size:clamp(38px,8.6vw,74px);line-height:1.06;color:var(--cream);letter-spacing:3px;text-shadow:5px 5px 0 var(--rose-d),10px 10px 0 rgba(0,0,0,.35)}
+.game-subtitle{margin:16px auto 20px;color:var(--cream);font-size:clamp(12px,2.2vw,16px);line-height:1.55;letter-spacing:.5px;text-shadow:2px 2px 0 rgba(0,0,0,.45)}
+.press-start{margin-top:16px;color:var(--cream);letter-spacing:3px;font-size:12px;opacity:.9}
+.title-flowers{position:absolute;left:0;right:0;bottom:0;height:34%;z-index:4;pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 72%,#e88baa 12px,transparent 13px),radial-gradient(circle at 24% 84%,#fff1dc 9px,transparent 10px),
+    radial-gradient(circle at 80% 66%,#c9b6e4 11px,transparent 12px),radial-gradient(circle at 92% 82%,#ffe066 10px,transparent 11px),
+    radial-gradient(circle at 60% 78%,#ffffff 8px,transparent 9px),radial-gradient(circle at 40% 88%,#e88baa 9px,transparent 10px)}
+
+.butterfly-layer{position:absolute;inset:0;z-index:7;pointer-events:none;overflow:hidden}
+.butterfly{position:absolute;width:20px;height:15px;animation:wander var(--wt,20s) linear infinite;animation-delay:var(--wdelay,0s)}
+.bwing{position:absolute;top:0;width:9px;height:15px}
+.bwing.left{left:0;background:var(--wc,#e88baa);clip-path:polygon(0 0,100% 18%,100% 82%,0 100%);transform-origin:100% 50%;animation:flapL .32s steps(2,end) infinite}
+.bwing.right{right:0;background:var(--wc,#e88baa);clip-path:polygon(100% 0,0 18%,0 82%,100% 100%);transform-origin:0 50%;animation:flapR .32s steps(2,end) infinite}
+.bbody{position:absolute;left:8px;top:2px;width:4px;height:11px;background:var(--ink)}
+@keyframes flapL{0%,100%{transform:rotateY(0)}50%{transform:rotateY(58deg)}}
+@keyframes flapR{0%,100%{transform:rotateY(0)}50%{transform:rotateY(-58deg)}}
+@keyframes wander{0%{transform:translate(-8vw,0)}25%{transform:translate(22vw,-9vh)}50%{transform:translate(55vw,2vh)}75%{transform:translate(80vw,-8vh)}100%{transform:translate(114vw,0)}}
+
+/* ============ Collectible hearts & spots ============ */
+.p-heart{position:absolute;z-index:9;width:30px;height:28px;border:0;cursor:pointer;background:transparent;animation:heartFloat 2.2s ease-in-out infinite}
+.p-heart::before{content:"";position:absolute;inset:0;
+  background:var(--rose);
+  clip-path:polygon(0 25%,12% 0,37% 0,50% 18%,62% 0,88% 0,100% 25%,100% 50%,50% 100%,0 50%);
+  filter:drop-shadow(2px 2px 0 rgba(0,0,0,.35))}
+.p-heart:hover{transform:scale(1.25)}
+.p-heart.collected{pointer-events:none}
+@keyframes heartFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.spot{position:absolute;z-index:5;width:34px;height:34px;border:0;background:transparent;cursor:pointer}
+.spot::after{content:"";position:absolute;inset:11px;background:#fff;box-shadow:0 0 10px 4px rgba(255,255,255,.9);animation:twinkle 1.6s ease-in-out infinite;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+#prompt{position:absolute;z-index:35;left:50%;bottom:22%;transform:translateX(-50%);background:var(--ink);color:var(--cream);border:3px solid var(--cream);padding:8px 16px;font-size:13px;letter-spacing:1px;cursor:pointer;box-shadow:4px 4px 0 rgba(0,0,0,.4)}
+
+.controls-hint{position:absolute;z-index:34;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:rgba(52,48,68,.8);color:var(--cream);font-size:10px;letter-spacing:2px;padding:6px 14px;border:2px solid rgba(255,241,220,.4);animation:hintOut 6s ease forwards;pointer-events:none;white-space:nowrap}
+@keyframes hintOut{0%,70%{opacity:1}100%{opacity:0}}
+
+/* D-pad */
+.dpad{display:none;position:absolute;z-index:35;left:10px;bottom:max(14px,env(safe-area-inset-bottom));grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);gap:4px}
+.dbtn{background:rgba(52,48,68,.75);border:3px solid var(--cream);color:var(--cream);font-size:19px;touch-action:none;user-select:none;-webkit-user-select:none}
+.dbtn:active{background:var(--rose-d)}
+.dbtn.up{grid-area:1/2}.dbtn.left{grid-area:2/1}.dbtn.right{grid-area:2/3}.dbtn.down{grid-area:3/2}
+
+/* ============ Flower pick scene ============ */
+#patchFlower{position:absolute;z-index:8;left:66%;bottom:22%;width:88px;height:88px;border:0;background:transparent;cursor:pointer}
+#patchFlowerCanvas{width:88px;height:88px;animation:sway 2.3s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+.glow-ring{position:absolute;inset:-14px;border:4px solid var(--gold);animation:ringPulse 1.4s ease-out infinite;clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%)}
+@keyframes ringPulse{0%{opacity:0;transform:scale(.6)}35%{opacity:1}100%{opacity:0;transform:scale(1.25)}}
+#patchFlower.picked{pointer-events:none}
+#patchFlower.picked .glow-ring{display:none}
+#pickSparkles{position:absolute;inset:0;pointer-events:none;z-index:9}
+.pick-spark{position:absolute;width:12px;height:12px;background:#fff;box-shadow:0 0 0 2px var(--gold);animation:pickFly .8s ease-out forwards}
+@keyframes pickFly{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
+
+/* ============ Journey scene ============ */
+.parallax{position:absolute;left:-50%;width:200%;pointer-events:none;background-repeat:repeat-x}
+.layer.far{bottom:34%;height:130px;opacity:.8;background-image:radial-gradient(circle at 8% 100%,#c3a3c9 0 38px,transparent 39px),radial-gradient(circle at 30% 100%,#b392bd 0 50px,transparent 51px),radial-gradient(circle at 55% 100%,#c3a3c9 0 44px,transparent 45px),radial-gradient(circle at 80% 100%,#b392bd 0 52px,transparent 53px);background-size:420px 130px;animation:panFar 40s linear infinite}
+.layer.near{bottom:26%;height:120px;opacity:.95;background-image:radial-gradient(circle at 10% 100%,#d98bb0 0 30px,transparent 31px),radial-gradient(circle at 45% 100%,#c9749d 0 40px,transparent 41px),radial-gradient(circle at 85% 100%,#d98bb0 0 33px,transparent 34px);background-size:360px 120px;animation:panNear 22s linear infinite}
+@keyframes panFar{to{transform:translateX(-50%)}}
+@keyframes panNear{to{transform:translateX(-50%)}}
+.walker3{position:absolute;z-index:6;left:44%;bottom:16%}
+.walker3 canvas{width:120px;height:154px}
+.lantern::after{content:"";position:absolute;left:4px;top:-8px;width:4px;height:8px;background:#343044}
+.lantern-a{left:36%}.lantern-b{left:50%;bottom:26%}.lantern-c{right:32%}
+.petal-layer{position:absolute;inset:0;z-index:7;pointer-events:none;overflow:hidden}
+
+#petals3{position:absolute;inset:0;z-index:7;pointer-events:none;overflow:hidden}
+.petal{position:absolute;top:-4%;width:14px;height:11px;background:var(--pink);clip-path:polygon(50% 0,100% 40%,78% 100%,22% 100%,0 40%);animation:petalFall var(--d,9s) linear infinite;animation-delay:var(--delay,0s)}
+@keyframes petalFall{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(4vw,28vh) rotate(140deg)}50%{transform:translate(-3vw,55vh) rotate(260deg)}75%{transform:translate(5vw,80vh) rotate(380deg)}100%{transform:translate(-2vw,108vh) rotate(520deg)}}
+
+/* ============ Girl scene & gift scene ============ */
+.actor4 canvas{transition:filter .5s}
+#giveFlowerBtn{position:absolute;z-index:30;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);white-space:nowrap}
+#giveFlowerBtn:hover{transform:translateX(-50%) translateY(-2px)}
+#qBubble{position:absolute;top:-46px;left:50%;transform:translateX(-50%) scale(0);width:44px;height:44px;background:#fff;border:4px solid var(--ink);font-weight:bold;font-size:26px;display:grid;place-items:center;transition:transform .3s cubic-bezier(.34,1.7,.64,1)}
+#qBubble.show{transform:translateX(-50%) scale(1)}
+#qBubble::after{content:"";position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top:9px solid var(--ink)}
+
+#warmGlow{position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,rgba(255,224,150,.55),rgba(255,179,107,.15) 60%,transparent 80%);opacity:0;transition:opacity 1.6s ease}
+#warmGlow.on{opacity:1}
+
+#flowerGift{position:absolute;z-index:12;width:64px;height:64px;display:none;pointer-events:none}
+#flowerGift canvas{width:64px;height:64px;filter:drop-shadow(2px 2px 0 rgba(0,0,0,.3))}
+#bigHeart{position:absolute;z-index:13;left:50%;bottom:56%;transform:translateX(-50%) scale(0)}
+#bigHeart canvas{width:96px;height:82px;filter:drop-shadow(3px 3px 0 rgba(0,0,0,.3))}
+#bigHeart.on{animation:heartPop 1.6s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes heartPop{0%{transform:translateX(-50%) scale(0)}30%{transform:translateX(-50%) scale(1.5)}55%{transform:translateX(-50%) scale(1.05)}100%{transform:translateX(-50%) translateY(-16px) scale(1.15)}}
+
+/* ============ Photo moment ============ */
+.photo-frame{position:absolute;z-index:6;left:50%;top:29%;transform:translateX(-50%);text-align:center;border:10px solid var(--cream);outline:5px solid var(--ink);background:linear-gradient(180deg,#4a3566 0%,#b85f8c 55%,#ffb98a 82%,#8fbf8a 100%);box-shadow:0 14px 40px rgba(0,0,0,.4)}
+.frame-inner{position:relative;width:min(300px,64vw);height:min(240px,34vh)}
+.actor6{position:absolute;bottom:0}
+.actor6 canvas{width:74px!important;height:95px!important}
+.boy6{left:12%}.girl6{right:12%}
+.photo-heart{position:absolute;left:50%;top:4%;transform:translateX(-50%);width:52px;height:45px;animation:heartFloat 2s ease-in-out infinite}
+.photo-title{top:6%;font-size:clamp(17px,3.3vw,26px);color:var(--cream);z-index:8;line-height:1.35}
+#keepMomentBtn{position:absolute;z-index:30;left:50%;bottom:max(74px,env(safe-area-inset-bottom));transform:translateX(-50%)}
+#keepMomentBtn:hover{transform:translateX(-50%) translateY(-2px)}
+#polaroid{position:absolute;z-index:35;right:5%;bottom:max(90px,13vh);transform:rotate(4deg);background:#fff;padding:10px 10px 26px;box-shadow:0 16px 40px rgba(0,0,0,.5);animation:polaroidIn .9s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes polaroidIn{from{opacity:0;transform:translateY(-140px) rotate(14deg)}to{opacity:1;transform:translateY(0) rotate(4deg)}}
+#polaroid p{text-align:center;font-size:15px;color:#5a4a52;margin-top:8px;letter-spacing:2px}
+#snapshotCanvas{width:168px;height:144px;background:#2b2440;image-rendering:pixelated}
+
+
+/* ============ Letter scene ============ */
+.scene-heading{position:absolute;z-index:6;top:16%;left:50%;transform:translateX(-50%);text-align:center;color:var(--cream);font-size:clamp(19px,4.4vw,34px);letter-spacing:4px;text-shadow:3px 3px 0 rgba(0,0,0,.5);line-height:1.4;width:94%}
+.heading-sub{font-size:.55em;color:var(--lav);letter-spacing:6px}
+#envelopeBtn{position:absolute;z-index:8;left:50%;top:44%;transform:translate(-50%,-50%);background:transparent;border:0;cursor:pointer;text-align:center}
+.envelope-svg{width:min(300px,62vw);filter:drop-shadow(0 12px 24px rgba(0,0,0,.55));transition:transform .25s}
+#envelopeBtn:hover .envelope-svg{transform:translateY(-6px) rotate(-1deg)}
+.env-seal{transform-box:fill-box;transform-origin:center}
+#envelopeBtn.shaking .envelope-svg{animation:envShake .55s ease-in-out}
+@keyframes envShake{0%,100%{transform:rotate(0)}20%{transform:rotate(-4deg) translateX(-5px)}40%{transform:rotate(3.5deg) translateX(5px)}60%{transform:rotate(-2.5deg)}80%{transform:rotate(1.5deg)}}
+.env-hint{display:block;margin-top:14px;color:var(--cream);letter-spacing:4px;font-size:11px;opacity:.75;animation:twinkle 1.8s ease-in-out infinite}
+.env-flap{transform-box:fill-box;transform-origin:center 0%;transition:transform .6s ease}
+#envelopeBtn.open .env-flap{transform:rotateX(175deg)}
+.env-seal.broken{animation:sealBreak .5s ease forwards}
+@keyframes sealBreak{0%{transform:scale(1)}35%{transform:scale(1.35)}100%{transform:scale(.4);opacity:0}}
+#envelopeBtn.open .env-hint,#giftBtn.open .env-hint{display:none}
+#letterPanel{position:absolute;z-index:9;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(480px,92vw)}
+.letter-paper{background:var(--cream);border:4px solid var(--ink);box-shadow:10px 12px 0 rgba(0,0,0,.4);padding:18px 20px 18px;position:relative;max-height:74vh;overflow-y:auto;animation:letterRise .8s cubic-bezier(.34,1.4,.64,1) both}
+.letter-continue{width:100%;margin-top:14px;font-size:16px;padding:12px}
+@keyframes letterRise{from{opacity:0;transform:translateY(120px) scale(.85)}to{opacity:1;transform:translateY(0) scale(1)}}
+.letter-seal-stamp{position:absolute;top:-16px;right:-14px;width:44px;height:44px;background:var(--rose-d);color:var(--cream);display:grid;place-items:center;font-size:22px;border:3px solid var(--cream);transform:rotate(12deg)}
+#letterText{white-space:pre-wrap;font-size:clamp(12px,2.3vw,15px);line-height:1.58;color:#3d2f35;min-height:6em}
+#letterCursor{position:absolute;bottom:18px;right:22px}
+
+
+/* ============ Gift scene ============ */
+#giftBtn{position:absolute;z-index:8;left:50%;top:52%;transform:translate(-50%,-50%);background:transparent;border:0;cursor:pointer;text-align:center}
+.gift-box{position:relative;width:min(220px,50vw);height:min(190px,44vw);margin:0 auto;transition:transform .2s}
+.gift-body{position:absolute;left:0;right:0;bottom:0;height:62%;background:var(--rose);border:5px solid var(--ink);
+  background-image:linear-gradient(0deg,transparent 44%,var(--cream) 44%,var(--cream) 56%,transparent 56%)}
+.body-ribbon{position:absolute;left:50%;top:0;bottom:0;width:16%;transform:translateX(-50%);background:var(--cream);border-left:4px solid var(--ink);border-right:4px solid var(--ink)}
+.gift-lid{position:absolute;left:-6%;right:-6%;bottom:52%;height:26%;background:var(--rose-d);border:5px solid var(--ink);z-index:2;transition:transform .7s cubic-bezier(.34,1.56,.64,1),opacity .7s}
+.lid-ribbon{position:absolute;left:50%;top:-4px;bottom:-4px;width:15%;transform:translateX(-50%);background:var(--cream);border-left:4px solid var(--ink);border-right:4px solid var(--ink)}
+#giftBtn.shaking .gift-box{animation:envShake .6s ease-in-out}
+#giftBtn.open .gift-lid{transform:translateY(-150px) rotate(-22deg);opacity:0}
+#giftHeartCanvas{position:absolute;left:50%;bottom:46%;transform:translate(-50%,30px) scale(0);width:120px;height:103px;transition:transform .9s cubic-bezier(.34,1.7,.64,1);filter:drop-shadow(0 0 22px rgba(255,143,163,.9))}
+#giftBtn.open #giftHeartCanvas{transform:translate(-50%,-66px) scale(1)}
+#giftMessage{position:absolute;z-index:9;left:50%;bottom:22%;width:min(560px,92vw);transform:translateX(-50%);text-align:center;animation:giftMsgIn .6s ease both}
+@keyframes giftMsgIn{from{opacity:0;transform:translateX(-50%) translateY(26px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.gift-big{color:var(--cream);font-size:clamp(18px,4vw,28px);line-height:1.5;letter-spacing:1px;text-shadow:3px 3px 0 rgba(0,0,0,.55)}
+
+
+/* ============ Ending ============ */
+.lamppost::before{content:"";position:absolute;left:-9px;top:-20px;width:30px;height:22px;background:#ffdf8a;clip-path:polygon(20% 0,80% 0,100% 100%,0 100%);box-shadow:0 0 22px 8px rgba(255,223,138,.65)}
+.lamp-l{left:29%}.lamp-r{right:27%}
+.firefly{position:absolute;width:6px;height:6px;background:#d8ff8a;box-shadow:0 0 10px 4px rgba(216,255,138,.75);animation:firefly var(--ft,9s) ease-in-out infinite, twinkle 1.3s ease-in-out infinite}
+@keyframes firefly{0%,100%{transform:translate(0,0)}25%{transform:translate(5vw,-6vh)}50%{transform:translate(-4vw,-11vh)}75%{transform:translate(6vw,-4vh)}}
+.actor9 canvas{width:118px;height:152px}
+#endingText{position:absolute;z-index:6;left:50%;top:11%;transform:translateX(-50%);text-align:center;width:min(720px,94%)}
+.ending-kicker{color:var(--lav);letter-spacing:6px;font-size:11px;margin-bottom:8px}
+.ending-title{font-size:clamp(21px,4.6vw,36px);line-height:1.42;color:var(--cream);letter-spacing:2px;text-shadow:3px 3px 0 rgba(0,0,0,.6)}
+.ending-sub{margin-top:12px;color:#bdb3d4;font-size:clamp(12px,2vw,15px);letter-spacing:1px}
+#allHeartsBadge{margin-top:14px;color:var(--gold);letter-spacing:3px;font-weight:bold;font-size:13px;text-shadow:0 0 12px rgba(255,224,102,.7)}
+#endingButtons{position:absolute;z-index:30;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:96%}
+
+/* ============ Overlays ============ */
+#particles{position:absolute;inset:0;z-index:14;pointer-events:none;overflow:hidden}
+.heart-p{position:absolute;font-size:17px;color:var(--rose);animation:floatUp linear forwards;filter:drop-shadow(1px 1px 0 rgba(0,0,0,.35))}
+.spark-p{position:absolute;width:9px;height:9px;background:#fff8d6;box-shadow:0 0 0 2px var(--gold);animation:floatUp linear forwards}
+@keyframes floatUp{0%{transform:translateY(0) scale(.6);opacity:0}12%{opacity:1}100%{transform:translateY(-230px) translateX(var(--dx,10px)) scale(1.1);opacity:0}}
+#flash{position:absolute;inset:0;z-index:60;background:#fff;opacity:0;pointer-events:none;transition:opacity .12s}
+#flash.on{opacity:.95}
+#toast{position:absolute;z-index:55;left:50%;bottom:26%;transform:translateX(-50%);background:var(--ink);color:var(--gold);border:3px solid var(--gold);padding:10px 18px;font-size:13px;letter-spacing:2px;box-shadow:0 6px 24px rgba(0,0,0,.5);animation:toastIn .4s ease both}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ============ Dialogue ============ */
+#dialogue{position:absolute;z-index:45;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(620px,94%);background:var(--cream);border:5px solid var(--ink);box-shadow:8px 8px 0 rgba(0,0,0,.4);padding:14px 16px 16px;cursor:pointer}
+#dialogue::after{content:"";position:absolute;bottom:-19px;left:50%;transform:translateX(-50%);border:9px solid transparent;border-top:13px solid var(--ink)}
+#dlgName{position:absolute;top:-17px;left:-5px;background:var(--ink);color:var(--cream);font-size:11px;letter-spacing:3px;padding:5px 12px}
+#dlgName.boy{background:#3f6b8f}#dlgName.girl{background:var(--rose-d)}#dlgName.note{background:var(--lav-d)}
+#dlgText{font-size:clamp(15px,2.6vw,19px);font-weight:bold;line-height:1.5;min-height:1.5em;color:#33262e}
+#dlgSkip{position:absolute;top:8px;right:8px;opacity:.8}
+
+/* ============ Responsive ============ */
+@media (max-width:700px){
+  #endingBoyWrap,#endingGirlWrap{bottom:34%}
+  #endingButtons{gap:7px}
+  #endingButtons .pixel-btn{font-size:12px;padding:10px 14px;letter-spacing:1px}
+  .moon-big{right:6%;top:13%;width:46px;height:46px}
+  #keepMomentBtn{white-space:nowrap;font-size:14px}
+  .controls-hint{display:none}
+  #polaroid{right:2%;bottom:16vh;transform:rotate(4deg) scale(.82);transform-origin:bottom right}
+  .cherry{width:76px}.fence{width:200px}.pond{width:150px}
+  .title-mailbox{width:78px;left:4%}
+  .actor4 canvas,.actor5 canvas,.actor6 canvas,.actor9 canvas{width:88px;height:113px}
+  .walker3 canvas{width:96px;height:123px}
+  #boyWrap6{left:2%}#girlWrap6{right:2%}
+  #endingBoyWrap{left:4%}#endingGirlWrap{right:4%}
+  #boyWrap5{left:6%}#girlWrap5{right:6%}
+  #boyWrap4{left:2%}#girlWrap4{right:4%}
+  .dpad{display:grid}
+  #heartsHud{font-size:12px}
+  #chapterLabel{display:none}
+  .scene-continue{font-size:15px;padding:14px 20px;max-width:92vw;bottom:calc(180px + env(safe-area-inset-bottom))}
+  .frame-inner{height:30vw}
+  .sakura-big{bottom:24%}
+  #hud{padding:8px}
+  .hud-btn{font-size:10px;padding:6px 8px}
+}
+@media (max-height:520px){
+  .game-title{font-size:34px}
+  #endingText{top:4%}
+  .scene-heading{top:10%}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
